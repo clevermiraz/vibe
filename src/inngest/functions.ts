@@ -1,7 +1,7 @@
 import { PROMPT } from "@/promot";
 import { Sandbox } from "@e2b/code-interpreter";
 import { createAgent, createNetwork, createTool, openai } from "@inngest/agent-kit";
-import z from "zod";
+import { z } from "zod";
 import { inngest } from "./client";
 import { getSandbox, lastAssistantTextMessageContent } from "./utils";
 
@@ -101,7 +101,7 @@ export const helloWorld = inngest.createFunction(
               try {
                 const sandbox = await getSandbox(sandboxId);
                 const contents = [];
-                for (const file in files) {
+                for (const file of files) {
                   const content = await sandbox.files.read(file);
                   contents.push({ path: file, content });
                 }
