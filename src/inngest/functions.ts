@@ -1,6 +1,6 @@
 import { PROMPT } from "@/promot";
 import { Sandbox } from "@e2b/code-interpreter";
-import { createAgent, createTool, openai } from "@inngest/agent-kit";
+import { createAgent, createNetwork, createTool, openai } from "@inngest/agent-kit";
 import z from "zod";
 import { inngest } from "./client";
 import { getSandbox, lastAssistantTextMessageContent } from "./utils";
@@ -128,7 +128,22 @@ export const helloWorld = inngest.createFunction(
       },
     });
 
-    const { output } = await codeAgent.run(`give details the following text: ${event.data.value}`);
+    const network = createNetwork({
+      name: "coding-agent-network",
+      agents: [codeAgent],
+      maxIter: 15,
+      router: async ({ network }) => {
+        const summary = network.state.data.summary;
+
+        if (summary) {
+          return;
+        }
+
+        return codeAgent;
+      },
+    });
+
+    const result = await network.run(event.data.value);
 
     const sandboxUrl = await step.run("get-sendbox-url", async () => {
       const sandbox = await getSandbox(sandboxId);
@@ -138,6 +153,11 @@ export const helloWorld = inngest.createFunction(
       return `https://${host}`;
     });
 
-    return { output, sandboxUrl };
+    return {
+      url: sandboxUrl,
+      title: "Fragment",
+      files: result.state.data.files,
+      summary: result.state.data.summary,
+    };
   }
 );
