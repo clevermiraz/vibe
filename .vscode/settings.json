@@ -23,7 +23,7 @@
   "typescript.validate.enable": false,
 
   // extra
-  "editor.fontFamily": "Victor Mono",
+  "editor.fontFamily": "Victor Mono, Fira Code",
   "editor.fontWeight": "500",
   "editor.cursorSmoothCaretAnimation": "on",
   "editor.cursorBlinking": "expand",
@@ -36,7 +36,7 @@
   "editor.wordWrap": "on",
 
   // terminal
-  "terminal.integrated.fontFamily": "Victor Mono",
+  "terminal.integrated.fontFamily": "Victor Mono, MesloLGS NF",
   "terminal.integrated.fontSize": 16,
 
   // file exclude for run node js project in smooth position
